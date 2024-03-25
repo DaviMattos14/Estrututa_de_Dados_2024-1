@@ -1,0 +1,2 @@
+Como fazer a regra de três simples
+O cálculo da regra de 3 é feito separando-se os valores em duas colunas. Na primeira linha coloca-se o nome das grandezas em cada coluna. Na linha debaixo preenche-se os respectivos valores conhecidos das duas grandezas. Na terceira linha escreve-se o outro valor conhecido e na coluna do valor desconhecido coloca-se x.

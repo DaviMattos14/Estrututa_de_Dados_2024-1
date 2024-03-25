@@ -1,0 +1,10 @@
+Mark Watney, 1970, 84, Marte
+Buzz Aldrin, 1930, 80, Júpiter
+Carlos Pena, 2002, 75, Marte
+Julia Cuto, 1993, 60, Júpiter
+Marcos Meira, 1965, 80, Júpiter
+Nome1, 1995, 85, Marte
+Nome2, 1995, 123, Marte
+Nome3, 1995, 89, Marte
+Nome4, 1964, 89, Júpiter
+Nome5, 1916, 50, Júpiter
