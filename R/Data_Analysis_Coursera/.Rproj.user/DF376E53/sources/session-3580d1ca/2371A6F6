@@ -1,0 +1,24 @@
+{
+    "id": "2371A6F6",
+    "path": "/usr/share/texlive/texmf-dist/tex/latex/base/fixltx2e.sty",
+    "project_path": null,
+    "type": "tex",
+    "hash": "1808678825",
+    "contents": "",
+    "dirty": false,
+    "created": 1711749762157.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1580683321,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1580683321,
+    "read_only": false,
+    "read_only_alternatives": []
+}
