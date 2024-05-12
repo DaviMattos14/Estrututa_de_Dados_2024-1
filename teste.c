@@ -1,45 +1,45 @@
-/*
-    Estrutura de Dados
-*/
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+const int MAX = 100;
 
-typedef struct No
+int main(void)
 {
-  int valor;
-  struct No* prox;
-}node;
+    char expressao[MAX];
 
-/* Lista encadeada*/
-void Imprime_Lista_Encadeada(node *pt) {
-  while (pt != NULL) {
-    printf("%d ", pt->valor);
-    pt = pt->prox;
-  }
+    scanf("%s", expressao);
+
+    if (expressao[0] == "i")
+    {
+        printf("Insere\n");
+    }
+    else if (expressao[0] == "r")
+    {
+        printf("remove\n");
+    }
+    else if (expressao[0] == "p")
+    {
+        printf("printar\n");
+    }
+    return 0;
 }
 
-void insere_no_fim(node *ptcab, int novo_valor){
-  node * novo_no = (node *) malloc(sizeof(node));
-  novo_no->valor = novo_valor;
-  while (ptcab->prox != NULL)
-  {
-    ptcab = ptcab ->prox;
-  }
-  ptcab->prox = novo_no;
-  novo_no->prox = NULL;
-  
-}
-int main(void){
-  node * head = (node *)malloc(sizeof(node));
-  head->valor = 14;
-  head->prox = NULL;
+/* code
 
-  node *ptcab = head;
-
-  insere_no_fim(ptcab,20);
-  insere_no_fim(ptcab, 61);
-  Imprime_Lista_Encadeada(head);
-  return 0;
-}
+    for(int i = 0; expressao[i]!=0;i++){
+        if (expressao[i]>=48 && expressao[i]<=57){
+            //printf("posicao %d: %c\n", i, expressao[i]);
+            printf("agr em int: %d\n", (expressao[i] - '0'));
+        }
+        else if (expressao[i]==40)
+        {
+            continue;
+        }
+        else if (expressao[i]==41)
+        {
+            printf("DESEMPILHA\n");
+        }
+        else{
+            int op = (int)expressao[i];
+            printf("operador em ascii: %d\n", op);
+        }
+    }
+*/
