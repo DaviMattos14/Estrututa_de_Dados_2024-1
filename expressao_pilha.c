@@ -1,59 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+const int MAX = 100;
 
 // Definição da estrutura de um nó da pilha
 typedef struct no
 {
-    int data;
+    int chave;
     struct no *prox;
 } no;
 
 // Função para criar um novo nó
-no *criar_no(int data)
+no *criar_no(int valor)
 {
     no *novo_no = (no *)malloc(sizeof(no));
-    novo_no->data = data;
+    novo_no->chave = valor;
     novo_no->prox = NULL;
     return novo_no;
 }
 
 // Função para verificar se a pilha está vazia
-int isEmpty(no *top)
+int isEmpty(no *topo)
 {
-    return (top == NULL);
+    return (topo == NULL);
 }
 
 // Função para empilhar um elemento
-void push(no **top, int data)
+void empilhar(no **topo, int valor)
 {
-    no *novo_no = criar_no(data);
-    novo_no->prox = *top;
-    *top = novo_no;
+    no *novo_no = criar_no(valor);
+    novo_no->prox = *topo;
+    *topo = novo_no;
 }
 
 // Função para desempilhar um elemento
-int pop(no **top)
+void desempilhar(no **pilha)
 {
-    if (isEmpty(*top))
+    if (*pilha == NULL)
     {
-        exit(EXIT_FAILURE);
+        printf("pilha vazia\n");
     }
-    no *temp = *top;
-    *top = (*top)->prox;
-    int popped = temp->data;
-    free(temp);
-    return popped;
+    else
+    {
+        no *topo = *pilha;
+        *pilha = topo->prox;
+    }
 }
 
-// Função para retornar o elemento do topo da pilha sem removê-lo
-int peek(no *top)
+// Função para retornar o elemento do topoo da pilha sem removê-lo
+int last(no *topo)
 {
-    if (isEmpty(top))
+    if (isEmpty(topo))
     {
-        exit(EXIT_FAILURE);
+        return -1;
     }
-    return top->data;
+    return topo->chave;
 }
 
 // Função para verificar se um caractere é um operador
@@ -73,91 +74,64 @@ int precedence(char op)
 }
 
 // Função para aplicar a operação
-int applyOperation(int a, int b, char op)
+int operacao(int a, int b, int op)
 {
     switch (op)
     {
-    case '+':
+    case 43:
+        // printf("%d", a+b);
         return a + b;
-    case '-':
+    case 45:
         return a - b;
-    case '*':
+    case 42:
         return a * b;
-    case '/':
+    case 47:
         return a / b;
     }
     return 0;
 }
 
-// Função para calcular o resultado da expressão
-int evaluateExpression(const char *expression)
+// Função para calcular a expressão
+void calcula(no **numeros, no **operadores)
 {
-    no *numPilha = NULL; // Pilha para operandos
-    no *opPilha = NULL;  // Pilha para operadores
-
-    for (int i = 0; expression[i] != '\0'; i++)
-    {
-        if (expression[i] == '(')
-        {
-            continue; // Ignorar '('
-        }
-        else if (isdigit(expression[i]))
-        {
-            int num = 0;
-            while (isdigit(expression[i]))
-            {
-                num = num * 10 + (expression[i] - '0');
-                i++;
-            }
-            push(&numPilha, num);
-            i--; // Ajustar o índice de volta para o último dígito
-        }
-        else if (isOperator(expression[i]))
-        {
-            while (!isEmpty(opPilha) && peek(opPilha) != '(' && precedence(peek(opPilha)) >= precedence(expression[i]))
-            {
-                int num2 = pop(&numPilha);
-                int num1 = pop(&numPilha);
-                char op = pop(&opPilha);
-                int result = applyOperation(num1, num2, op);
-                push(&numPilha, result);
-            }
-            push(&opPilha, expression[i]);
-        }
-        else if (expression[i] == ')')
-        {
-            while (!isEmpty(opPilha) && peek(opPilha) != '(')
-            {
-                int num2 = pop(&numPilha);
-                int num1 = pop(&numPilha);
-                char op = pop(&opPilha);
-                int result = applyOperation(num1, num2, op);
-                push(&numPilha, result);
-            }
-            if (!isEmpty(opPilha) && peek(opPilha) == '(')
-                pop(&opPilha); // Remover '(' correspondente
-        }
-    }
-
-    while (!isEmpty(opPilha))
-    {
-        int num2 = pop(&numPilha);
-        int num1 = pop(&numPilha);
-        char op = pop(&opPilha);
-        int result = applyOperation(num1, num2, op);
-        push(&numPilha, result);
-    }
-
-    return pop(&numPilha);
+    int num1 = last(*numeros);
+    desempilhar(&*numeros);
+    int op = last(*operadores);
+    desempilhar(&*operadores);
+    int num2 = last(*numeros);
+    desempilhar(&*numeros);
+    int resultado = operacao(num2, num1, op);
+    empilhar(&*numeros, resultado);
 }
-
 int main()
 {
-    char expression[100];
-    scanf("%s", expression);
+    char expressao[MAX];
 
-    int result = evaluateExpression(expression);
-    printf("%d\n", result);
+    scanf("%s", expressao);
 
+    no *numPilha = NULL;
+    no *opPilha = NULL;
+
+    for (int i = 0; expressao[i] != 0; i++)
+    {
+        if (expressao[i] >= 48 && expressao[i] <= 57)
+        {
+            empilhar(&numPilha, (expressao[i] - '0'));
+        }
+        else if (expressao[i] == 40)
+        {
+            continue;
+        }
+        else if (expressao[i] == 41)
+        {
+            calcula(&numPilha, &opPilha);
+        }
+        else if (isOperator(expressao[i]))
+        {
+            int op = (int)expressao[i];
+            empilhar(&opPilha, op);
+        }
+    }
+    printf("%d\n", numPilha->chave);
     return 0;
 }
