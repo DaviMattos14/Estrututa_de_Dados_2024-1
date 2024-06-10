@@ -1,21 +1,71 @@
 #include <stdio.h>
+#include<stdlib.h>
 const int MAX = 100;
+
+typedef struct no
+{
+    int chave;
+    struct no *esq;
+    struct no *dir;
+}no;
+
+no* criar_no(int chave){
+    no* novo_no = (no *)malloc(sizeof(no));
+    novo_no->chave= chave;
+    novo_no->esq = NULL;
+    novo_no->dir = NULL;
+    return novo_no;
+}
+
+no *insere(no *raiz, int valor){
+    if (raiz == NULL)
+    {
+        return criar_no(valor);
+    }
+    else if (valor < raiz->chave)
+    {
+        raiz->esq = insere(raiz->esq, valor);
+    }
+    else if (valor >= raiz->chave)
+    {
+        raiz->dir = insere(raiz->dir, valor);  
+    }
+    return raiz;    
+}
+void imprimir(no *raiz){
+    if (raiz!=NULL)
+    {
+        imprimir(raiz->esq);
+        printf("%d ", raiz->chave);
+        imprimir(raiz->dir);
+    }
+}
 
 int main(void)
 {
-    char expressao[MAX];
+    char expressao[MAX] = " ";
+    int chave;
+    no* raiz = NULL;
 
     scanf("%s", expressao);
-
-    if (expressao[0] == "i")
+    scanf(" %d", &chave);
+    while (expressao[0])
     {
-        printf("Insere\n");
+        /* code */
     }
-    else if (expressao[0] == "r")
+    
+    if ((expressao[0] == 'i'))
     {
-        printf("remove\n");
+        printf("Insere ");
+        printf("%d\n", chave);
+        raiz = insere(raiz,chave);
     }
-    else if (expressao[0] == "p")
+    else if ((expressao[0] == 'r'))
+    {
+        printf("remove ");
+        printf("%d\n", chave);
+    }
+    else if ((expressao[0] == 'p'))
     {
         printf("printar\n");
     }
