@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Estrutura de um nó da árvore
+/*
+Estrutura de um nó da árvore
+*/ 
 typedef struct Node
 {
     int chave;
