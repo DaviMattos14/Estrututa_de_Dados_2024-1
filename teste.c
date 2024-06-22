@@ -1,95 +1,86 @@
 #include <stdio.h>
-#include<stdlib.h>
-const int MAX = 100;
+#include <stdlib.h>
 
-typedef struct no
-{
-    int chave;
-    struct no *esq;
-    struct no *dir;
-}no;
+typedef struct {
+    int *parent;
+    int *rank;
+    int *size; // Array to keep track of the size of each set
+    int n;
+} UnionFind;
 
-no* criar_no(int chave){
-    no* novo_no = (no *)malloc(sizeof(no));
-    novo_no->chave= chave;
-    novo_no->esq = NULL;
-    novo_no->dir = NULL;
-    return novo_no;
+UnionFind* createSet(int n) {
+    UnionFind *uf = (UnionFind*) malloc(sizeof(UnionFind));
+    uf->parent = (int*) malloc((n + 1) * sizeof(int));
+    uf->rank = (int*) malloc((n + 1) * sizeof(int));
+    uf->size = (int*) malloc((n + 1) * sizeof(int));
+    uf->n = n;
+    for (int i = 1; i <= n; i++) {
+        uf->parent[i] = i;
+        uf->rank[i] = 0;
+        uf->size[i] = 1;
+    }
+    return uf;
 }
 
-no *insere(no *raiz, int valor){
-    if (raiz == NULL)
-    {
-        return criar_no(valor);
+int find(UnionFind *uf, int x) {
+    if (uf->parent[x] != x) {
+        uf->parent[x] = find(uf, uf->parent[x]);
     }
-    else if (valor < raiz->chave)
-    {
-        raiz->esq = insere(raiz->esq, valor);
-    }
-    else if (valor >= raiz->chave)
-    {
-        raiz->dir = insere(raiz->dir, valor);  
-    }
-    return raiz;    
+    return uf->parent[x];
 }
-void imprimir(no *raiz){
-    if (raiz!=NULL)
-    {
-        imprimir(raiz->esq);
-        printf("%d ", raiz->chave);
-        imprimir(raiz->dir);
+
+void unionSets(UnionFind *uf, int x, int y) {
+    int rootX = find(uf, x);
+    int rootY = find(uf, y);
+
+    if (rootX != rootY) {
+        if (uf->rank[rootX] < uf->rank[rootY]) {
+            uf->parent[rootX] = rootY;
+            uf->size[rootY] += uf->size[rootX];
+        } else {
+            uf->parent[rootY] = rootX;
+            uf->size[rootX] += uf->size[rootY];
+            uf->rank[rootX]++;
+        }
     }
 }
 
-int main(void)
-{
-    char expressao[MAX] = " ";
-    int chave;
-    no* raiz = NULL;
+int getMaxGroupSize(UnionFind *uf) {
+    int maxSize = 0;
+    for (int i = 1; i <= uf->n; i++) {
+        if (uf->parent[i] == i && uf->size[i] > maxSize) {
+            maxSize = uf->size[i];
+        }
+    }
+    return maxSize;
+}
 
-    scanf("%s", expressao);
-    scanf(" %d", &chave);
-    while (expressao[0])
-    {
-        /* code */
+void freeSet(UnionFind *uf) {
+    free(uf->parent);
+    free(uf->rank);
+    free(uf->size);
+    free(uf);
+}
+
+int main() {
+    int testCases;
+    scanf("%d", &testCases);
+
+    while (testCases--) {
+        int n, m;
+        scanf("%d %d", &n, &m);
+
+        UnionFind *uf = createSet(n);
+
+        for (int i = 0; i < m; i++) {
+            int a, b;
+            scanf("%d %d", &a, &b);
+            unionSets(uf, a, b);
+        }
+
+        printf("%d\n", getMaxGroupSize(uf));
+        freeSet(uf);
     }
-    
-    if ((expressao[0] == 'i'))
-    {
-        printf("Insere ");
-        printf("%d\n", chave);
-        raiz = insere(raiz,chave);
-    }
-    else if ((expressao[0] == 'r'))
-    {
-        printf("remove ");
-        printf("%d\n", chave);
-    }
-    else if ((expressao[0] == 'p'))
-    {
-        printf("printar\n");
-    }
+
     return 0;
 }
-
-/* code
-
-    for(int i = 0; expressao[i]!=0;i++){
-        if (expressao[i]>=48 && expressao[i]<=57){
-            //printf("posicao %d: %c\n", i, expressao[i]);
-            printf("agr em int: %d\n", (expressao[i] - '0'));
-        }
-        else if (expressao[i]==40)
-        {
-            continue;
-        }
-        else if (expressao[i]==41)
-        {
-            printf("DESEMPILHA\n");
-        }
-        else{
-            int op = (int)expressao[i];
-            printf("operador em ascii: %d\n", op);
-        }
-    }
-*/

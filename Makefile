@@ -17,4 +17,8 @@ teste2: teste2.c
 arvore_rn:
 	gcc -o arvore_rn arvore_rn.c -ansi -Wall -pedantic -std=c99
 	arvore_rn.exe
+union_find:
+	gcc -o union_find union_find.c -ansi -Wall -pedantic -std=c99
+	union_find.exe
+
 
