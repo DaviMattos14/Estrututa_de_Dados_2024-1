@@ -2,19 +2,16 @@
 #include <stdlib.h>
 
 typedef struct UnionFind{
-    int *raiz, *tam, *rank, n;
+    int *raiz, *tam;
 } UnionFind;
 
 UnionFind* criarConj(int n){
     UnionFind *conj = (UnionFind*) malloc(sizeof(UnionFind));
     conj->raiz = (int*) malloc((n+1) * sizeof(int));
-    conj->rank = (int*) malloc((n+1) * sizeof(int));
     conj->tam = (int*) malloc((n+1) * sizeof(int));
-    conj->n = n;
-
+    
     for (int i = 1; i <= n; i++){
         conj->raiz[i] = i;
-        conj->rank[i] = 0;
         conj->tam[i] = 1;
     }
     return conj;
@@ -34,13 +31,12 @@ void uniao_conj(UnionFind *conj, int a, int b){
 
     if (raizA != raizB)
     {
-        if (conj->rank[raizA] < conj->rank[raizB]){
+        if (conj->tam[raizA] < conj->tam[raizB]){
             conj->raiz[raizA] = raizB;
             conj->tam[raizB] += conj->tam[raizA];
         }else{
             conj->raiz[raizB] = raizA;
             conj->tam[raizA] += conj->tam[raizB];
-            conj->rank[raizA]++;
         }
     }
 }
