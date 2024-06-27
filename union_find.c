@@ -41,9 +41,9 @@ void uniao_conj(UnionFind *conj, int a, int b){
     }
 }
 
-int tamMAX(UnionFind *conj){
+int tamMAX(UnionFind *conj,int n){
     int tamMAX = 0;
-    for (int i = 1; i <= conj->n; i++){
+    for (int i = 1; i <= n; i++){
         if (conj->raiz[i] == i && conj->tam[i] > tamMAX){
             tamMAX = conj->tam[i];
         }
@@ -66,7 +66,7 @@ int main(){;
             scanf("%d %d", &a, &b);
             uniao_conj(conj,a,b);
         }
-        printf("%d\n",tamMAX(conj));
+        printf("%d\n",tamMAX(conj, n));
         free(conj);
     }
     return 0;
